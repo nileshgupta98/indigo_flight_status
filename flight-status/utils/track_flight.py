@@ -27,9 +27,31 @@ def analyze_flight_schedule():
             se_departure - ac_departure
         ).total_seconds() < 0:
             if (se_arrival - ac_arrival).total_seconds == 0:
-                delayed_flight_list.append({'flight_id':_['flight_id'],'delay_by':ac_departure - se_departure})
+                delayed_flight_list.append({'flight_id':_['flight_id'],'delay_by':ac_departure - se_departure, 'cancel':False})
+                update_query = {
+                        "$set": {
+                            "status": "Delay"
+                        }
+                    }
+                dbutils.update_docs(collection_name='flight_data',
+                                    condition={"flight_id":_['flight_id']},
+                                    update_query=update_query)
             else:
-                delayed_flight_list.append({'flight_id':_['flight_id'],'delay_by':ac_arrival - se_arrival})
+                delayed_flight_list.append({'flight_id':_['flight_id'],'delay_by':ac_arrival - se_arrival,'cancel':False})
+                update_query = {
+                        "$set": {
+                            "status": "Delay"
+                        }
+                    }
+                dbutils.update_docs(collection_name='flight_data',
+                                    condition={"flight_id":_['flight_id']},
+                                    update_query=update_query)
+        elif _['status']=='Cancelled':
+            delayed_flight_list.append({'flight_id':_['flight_id'],'cancel':True})
+
+            
+    
+        
 
     return delayed_flight_list
 
@@ -63,7 +85,8 @@ def get_user_id_flight(delayed_flight):
             "email": _["email_id"],
             "name": _['name'],
             "flight_id": grouped_user_flight_data[str(_["_id"])][0]["flight_id"],
-            "delayed_by":grouped_flight_id[grouped_user_flight_data[str(_["_id"])][0]["flight_id"]][0]['delay_by']
+            "delayed_by":grouped_flight_id[grouped_user_flight_data[str(_["_id"])][0]["flight_id"]][0].get('delay_by',''),
+            "cancelled":grouped_flight_id[grouped_user_flight_data[str(_["_id"])][0]["flight_id"]][0].get('cancel',''),
         }
         for _ in users
     ]
@@ -115,9 +138,16 @@ def send_delay_notification():
     for _ in user_email_id:
         from_email = "nileshgupta98g@gmail.com"
         to_email = _['email']
-        subject = "FLIGHT DELAY - INDIGO"
-        body = f"""Dear {_['name']},
-                We hope this message finds you well. We are writing to inform you that your upcoming.flight, {_['flight_id']} hour, has been delayed by {str(_['delayed_by'])}. We apologize for any inconvenience this may cause and appreciate your understanding and patience"""
+        if not _['cancelled']:
+            subject = "FLIGHT DELAY - INDIGO"
+
+            body = f"""Dear {_['name']},
+                    We hope this message finds you well. We are writing to inform you that your upcoming.flight, {_['flight_id']} , has been delayed by {str(_['delayed_by'])} hour. We apologize for any inconvenience this may cause and appreciate your understanding and patience"""
+        else:
+            subject = "FLIGHT Cancelled - INDIGO"
+
+            body = f"""Dear {_['name']},
+                    We hope this message finds you well. We are writing to inform you that your upcoming.flight, {_['flight_id']} , has been cancelled. We apologize for any inconvenience this may cause and appreciate your understanding and patience"""
         smtp_server = "smtp.gmail.com"
         port = 587  # Typically 587 for TLS, 465 for SSL
         login = "nileshgupta98g@gmail.com"
