@@ -1,4 +1,16 @@
 
+# Indigo Flight Status System
+
+This system allows customers to check the status of their flights. After logging in, users can access a page to check flight status, where they can enter the flight number. The system will then display all relevant details about the flight. Additionally, users will receive notifications if their flight is delayed. This repository contains both the front-end and back-end code.
+
+
+## Tech Stack
+
+**Frontend:** Reactjs, HTML, CSS
+
+**Backend:** Python, Flask
+
+
 ## Run Locally
 ## Frontend
 
