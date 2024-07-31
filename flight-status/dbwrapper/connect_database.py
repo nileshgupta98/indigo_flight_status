@@ -1,7 +1,7 @@
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
-load_dotenv('/home/apoorav/Desktop/sabudh/flight-status/.env')
+load_dotenv()
 class ConnectDatabase:
     """
     Creates a connection with the mongo database.
