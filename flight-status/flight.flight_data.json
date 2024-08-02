@@ -4,14 +4,15 @@
   },
   "flight_id": "6E 2341",
   "airline": "Indigo",
-  "status": "On Time",
+  "status": "Delay",
   "departure_gate": "A12",
   "arrival_gate": "B7",
   "scheduled_departure": "2024-07-26T14:00:00Z",
   "scheduled_arrival": "2024-07-26T18:00:00Z",
   "actual_departure": "2024-07-26T14:00:00Z",
-  "actual_arrival": "2024-07-26T18:00:00Z"
-},{
+  "actual_arrival": "2024-07-26T19:00:00Z"
+},
+{
   "_id": {
     "$oid": "66a6203df34d68ac07e155f8"
   },
@@ -24,7 +25,8 @@
   "scheduled_arrival": "2024-07-26T20:00:00Z",
   "actual_departure": "2024-07-26T16:00:00Z",
   "actual_arrival": "2024-07-26T20:00:00Z"
-},{
+},
+{
   "_id": {
     "$oid": "66a62071f34d68ac07e155f9"
   },
