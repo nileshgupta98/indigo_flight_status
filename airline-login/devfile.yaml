@@ -12,13 +12,12 @@ components:
           protocol: https
           targetPort: 8080
       image: quay.io/devfile/universal-developer-image:ubi8-latest
-      memoryLimit: 512Mi
-      mountSources: true
+      memoryLimit: 1G
       sourceMapping: /projects
       volumeMounts:
-        - name: venv
-          path: /home/user/.venv
-    name: python
-  - name: venv
+        - name: m2
+          path: /home/user/.npm
+    name: tools
+  - name: m2
     volume:
       size: 1G
